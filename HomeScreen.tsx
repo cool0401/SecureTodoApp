@@ -83,7 +83,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
         </View>
   
         <TouchableOpacity style={styles.roundButton} onPress={handleAuthentication}>
-          <Text style={styles.buttonText}>Auth</Text>
+          <Text style={styles.buttonText}>Go to setting</Text>
         </TouchableOpacity>
       </View>
   );  
@@ -111,8 +111,8 @@ const styles = StyleSheet.create({
     roundButton: {
       backgroundColor: '#0b63ea', // Your desired background color
       borderRadius: 50, // Half of the width and height to make it round
-      width: 100, // Adjust the width as needed
-      height: 50, // Adjust the height as needed
+      paddingVertical: 10,
+      paddingHorizontal: 20,
       justifyContent: 'center',
       alignItems: 'center',
     },
