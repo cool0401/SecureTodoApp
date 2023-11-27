@@ -17,19 +17,24 @@ interface Todo {
   task: string;
 }
 
-const TodoItem = ({ item, onDelete }: { item: Todo; onDelete: (id: string) => void }) => (
-  <View style={styles.todoItem}>
-    <View style={styles.todoIndicator} />
-    <Text style={styles.todoText}>{item.task}</Text>
-    <TouchableOpacity onPress={() => onDelete(item.id)}>
-      <Text style={styles.todoRemove}>Remove</Text>
-    </TouchableOpacity>
-  </View>
-);
+const TodoItem = ({ item, onDelete, onEdit }: { item: Todo; onDelete: (id: string) => void; onEdit: (id: string, task: string) => void }) => {
+  return (
+    <View style={styles.todoItem}>
+      <View style={styles.todoIndicator} />
+      <TouchableOpacity onPress={() => onEdit(item.id, item.task)}>
+        <Text style={styles.todoText}>{item.task}</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => onDelete(item.id)}>
+        <Text style={styles.todoRemove}>Remove</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
 
 const TodoListScreen = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [task, setTask] = useState('');
+  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
 
   const addTodo = () => {
     setTodos([...todos, { id: `${todos.length + 1}`, task }]);
@@ -38,6 +43,13 @@ const TodoListScreen = () => {
 
   const deleteTodo = (id: string) => {
     setTodos(todos.filter(todo => todo.id !== id));
+  };
+
+  const editTodo = (id: string, currentTask: string) => {
+    // Set the selected todo item ID for editing
+    setSelectedItemId(id);
+    // Set the current task in the input field
+    setTask(currentTask);
   };
 
   const saveData = async (key: string, data: Object) => {
@@ -74,6 +86,16 @@ const TodoListScreen = () => {
     saveData('todos', todos);
   }, [todos]);
 
+  const handleSaveEdit = () => {
+    if (selectedItemId) {
+      // Update the task of the selected todo item
+      setTodos(todos.map(todo => (todo.id === selectedItemId ? { ...todo, task } : todo)));
+      // Clear the selected item ID and reset the input field
+      setSelectedItemId(null);
+      setTask('');
+    }
+  };
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -84,7 +106,7 @@ const TodoListScreen = () => {
         data={todos}
         style={styles.todoContainer}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <TodoItem item={item} onDelete={deleteTodo} />}
+        renderItem={({ item }) => <TodoItem item={item} onDelete={deleteTodo} onEdit={editTodo} />}
       />
       <View style={styles.inputContainer}>
         <TextInput
@@ -93,8 +115,8 @@ const TodoListScreen = () => {
           value={task}
           onChangeText={text => setTask(text)}
         />
-        <TouchableOpacity style={styles.todoAddContainer} onPress={addTodo}>
-          <Text style={styles.todoAdd}>Add</Text>
+        <TouchableOpacity style={styles.todoAddContainer} onPress={selectedItemId ? handleSaveEdit : addTodo}>
+          <Text style={styles.todoAdd}>{selectedItemId ? 'Save' : 'Add'}</Text>
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
