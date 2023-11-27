@@ -80,14 +80,12 @@ const TodoListScreen = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0} // Adjust as needed
     >
-      <ScrollView style={{ flex: 1 }}>
-        <FlatList
-          data={todos}
-          style={styles.todoContainer}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <TodoItem item={item} onDelete={deleteTodo} />}
-        />
-      </ScrollView>
+      <FlatList
+        data={todos}
+        style={styles.todoContainer}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => <TodoItem item={item} onDelete={deleteTodo} />}
+      />
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
