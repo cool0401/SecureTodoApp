@@ -5,7 +5,6 @@ import {
   View,
   TouchableOpacity,
   TextInput,
-  ScrollView,
   StyleSheet,
   Platform,
   KeyboardAvoidingView,
@@ -21,7 +20,7 @@ const TodoItem = ({ item, onDelete, onEdit }: { item: Todo; onDelete: (id: strin
   return (
     <View style={styles.todoItem}>
       <View style={styles.todoIndicator} />
-      <TouchableOpacity onPress={() => onEdit(item.id, item.task)}>
+      <TouchableOpacity style={styles.todoTextContainer} onPress={() => onEdit(item.id, item.task)}>
         <Text style={styles.todoText}>{item.task}</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => onDelete(item.id)}>
@@ -102,6 +101,7 @@ const TodoListScreen = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0} // Adjust as needed
     >
+      <Text style={styles.header}>TODO:</Text>
       <FlatList
         data={todos}
         style={styles.todoContainer}
@@ -133,16 +133,27 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 10,
   },
+  header: {
+    fontSize: 30,
+    color:'#0346ac',
+    fontWeight: 'bold',
+    marginTop: 30,
+    marginHorizontal: 10,
+    marginBottom: 20
+  },
   todoContainer: {
     flex: 1,
   },
   todoAddContainer: {
-    backgroundColor: '#0b63ea',
+    backgroundColor: '#0346ac',
     borderRadius: 20,
     paddingVertical: 15,
     paddingHorizontal: 25,
     fontSize: 22,
     fontWeight: 'bold',
+  },
+  todoTextContainer: {
+    flex: 1,
   },
   todoAdd: {
     color: 'white',
@@ -154,11 +165,11 @@ const styles = StyleSheet.create({
     padding: 20,
     marginHorizontal: 10,
     marginVertical: 5,
-    borderRadius: 20,
+    borderRadius: 30,
     backgroundColor: 'white',
   },
   todoIndicator: {
-    backgroundColor: '#0b63ea',
+    backgroundColor: '#0346ac',
     width: 30,
     height: 30,
     borderRadius: 30,
