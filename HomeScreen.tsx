@@ -38,6 +38,9 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
   };
 
   const handleAuthentication = async () => {
+    if (!authOptions.availableAuthentication) {
+      return Alert.alert('Authentication', 'Please set authentication');
+    }
     const isBiometricEnrolled = await LocalAuthentication.isEnrolledAsync();
 
     if (!isBiometricEnrolled) {
@@ -64,23 +67,9 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
       <View style={styles.container}>
         <StatusBar style="auto" />
   
-        <View>
-          <Text style={[styles.text, styles.textBold]}>
-            Available Authentication:
-          </Text>
-          <Text style={styles.text}>
-            {authOptions.availableAuthentication ? 'Yes' : 'No'}
-          </Text>
-  
-          {authOptions.availableAuthentication && (
-            <>
-              <Text style={[styles.text, styles.textBold]}>
-                Authentication Types:
-              </Text>
-              <Text style={styles.text}>{authOptions.authenticationTypes}</Text>
-            </>
-          )}
-        </View>
+        <Text style={[styles.text]}>
+          Set Authentication to Proceed
+        </Text>
   
         <TouchableOpacity style={styles.roundButton} onPress={handleAuthentication}>
           <Text style={styles.buttonText}>Go to setting</Text>
@@ -96,11 +85,12 @@ const styles = StyleSheet.create({
       flex: 1,
       backgroundColor: '#fff',
       alignItems: 'center',
-      justifyContent: 'center',
+      justifyContent: 'flex-end',
       gap: 30,
+      paddingVertical: 40
     },
     text: {
-      fontSize: 18,
+      fontSize: 22,
       marginTop: 10,
       textAlign: 'center',
     },
