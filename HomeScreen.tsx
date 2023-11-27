@@ -38,9 +38,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
   };
 
   const handleAuthentication = async () => {
-    if (!authOptions.availableAuthentication) {
-      return Alert.alert('Authentication', 'Please set authentication');
-    }
+    
     const isBiometricEnrolled = await LocalAuthentication.isEnrolledAsync();
 
     if (!isBiometricEnrolled) {
